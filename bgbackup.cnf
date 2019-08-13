@@ -1,0 +1,112 @@
+############################################
+
+# bgbackup configuration file
+
+# Check for Percona backup history records to migrate?
+# If yes, be warned that backups which meet the current
+# delete threshold will be deleted. Backups which have
+# already been deleted will be marked with deleted_at
+# as today's date.
+checkmigrate=no
+
+# Day of week to do full backup. Set to "Everyday" to do full backup everyday (subsequent daily backups will be incremental)
+fullbackday=Everyday
+
+# Differential does incremental backup based on the last full backup instead of last full or incremental
+differential=no
+
+# Number of full backups to keep
+keepnum=10
+
+#backup location, Currently only supports s3 and local/SAN
+backuploc=local
+
+#s3 bucket name
+s3bucket=
+
+#s3 command tool
+s3cmd=/usr/bin/s3cmd
+
+# Number of backup table backups to keep.
+keepbkuptblnum=1
+
+#Full path of xtrabackup command
+innobackupex=/encrypted_data/mysql/software/innobackupex
+
+# Full path to backup directory root
+backupdir=/backup-hhc/xtradbbackup
+
+# Path to keep logs
+logpath=/encrypted_data/mysql/log
+
+#Backup history Schema
+backuphistschema=xtrabackup_history
+
+# Log verbosity
+verbose=no
+
+# Log to syslog
+syslog=no
+
+# Backup type (directory or archive)
+bktype=archive
+
+# Archive type (tar or xbstream) for archive backup type
+arctype=xbstream
+
+# Used for parallel and compress
+threads=5
+
+# Use parallel threads for backup?
+parallel=yes
+
+# Encrypt backup?
+encrypt=yes
+
+# Full path to encryption key
+cryptkey=/encrypted_data/mysql/conf/backupscript.key
+
+# Compress backup?
+compress=yes
+
+# Compression utility used for archives, for now gzip or pigz (parallel gzip) are supported
+# For standalone directories, qpress is always used
+computil=gzip
+
+
+# By default, xtrabackup will lock all tables to create a consistent backup of non-transactional
+# tables. Enabled nolock to disable this behaviour.
+# WARNING: Only disable locking if you do not have or do not care about your non-transactional tables.
+nolock=no
+
+# Include Galera info and enable wsrep_desync to avoid flow control during backup.
+# When the backup is finished, wait for wsrep_local_recv_queue to drop to 0 before
+# disabling wsrep_desync. 
+galera=yes
+
+# Include slave info?
+# WARNING: If slave info is included and nolock is enabled, bgbackup will enable safe-slave-backup. 
+# (safe slave backups will temporarily pause replication. Please inspect the documentation if your application cannot handle stale reads.)
+slave=no
+
+# Comma separated list of email address to be notified.
+maillist=
+
+# Email subject prefix
+mailsubpre="[Xtra Backup]"
+
+# Email (all or failure)
+mailon=all
+
+# Run command(s) after backup, for example: run_on_success=/usr/local/bin/success.sh
+# (leave empty if you do not want to run anything)
+# If backup succedded
+run_after_success=
+# If backup failed
+run_after_fail=
+
+# Debug prints all variables to the commandline when script is ran.
+# This can be a security risk. Set to yes to enable.
+debug=no
+
+############################################
